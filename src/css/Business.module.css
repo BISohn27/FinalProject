@@ -1,0 +1,19 @@
+.wrap{
+    margin-top:20px;
+    width:70%;
+    display:flex;
+    justify-content: space-between;
+}
+.textBox{
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.seatAvailable{
+    width: 10%;
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.img{
+}
