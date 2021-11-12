@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 
 const { kakao } = window;
 
-const MapContainer = ({array, references}) =>{
+const MapContainer = ({array, references, shown}) =>{
     useEffect(()=>{
             const mapContainer = document.getElementById('map'), // 지도를 표시할 div  
             mapOption = { 
@@ -26,7 +26,14 @@ const MapContainer = ({array, references}) =>{
                         })
                         // 마커에 표시할 인포윈도우를 생성합니다 
                         const infowindow = new kakao.maps.InfoWindow({
-                            content: `<div style="color:black;"><h4>${array[i].ename}</h4><p>${array[i].road_address}</p></div>` // 인포윈도i우에 표시할 내용
+                            content: `
+                                    <div style="color:black; width: 20vw; text-align:center; font-weight: bolder;">
+                                        ${array[i].ename}
+                                    </div>
+                                    <div style="text-align:center; width: 20vw;">
+                                        ${array[i].road_address}
+                                    </div>
+                                    ` // 인포윈도i우에 표시할 내용
                         });
                         // 마커에 mouseover 이벤트와 mouseout 이벤트를 등록합니다
                         // 이벤트 리스너로는 클로저를 만들어 등록합니다 
@@ -34,10 +41,10 @@ const MapContainer = ({array, references}) =>{
                         kakao.maps.event.addListener(marker, 'mouseover', makeOverListener(map, marker, infowindow));
                         kakao.maps.event.addListener(marker, 'mouseout', makeOutListener(infowindow));
                         kakao.maps.event.addListener(marker, 'click', function() {
-                            references[i].current.scrollIntoView();
+                            references[i].current.scrollIntoView({behavior: "smooth"});
                         });
 
-                        if(i === 0 ){
+                        if(i === shown-1 ){
                             map.setCenter(position);
                         }
                     }

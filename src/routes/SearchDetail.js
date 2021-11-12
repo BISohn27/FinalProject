@@ -6,6 +6,7 @@ import axios from 'axios';
 
 import MapContainer from '../components/MapContainer';
 import Business from '../components/Business';
+import Search from '../components/Search';
 import Json from '../components/dummy.json';
 import styles from '../css/SearchDetail.module.css';
 
@@ -20,15 +21,17 @@ function SearchDetail() {
 
     const businessRef = useRef([]);
     const dataRef = useRef([]);
+    const keyword = useRef("");
     const {search} = useLocation();
-    const {keyword} = queryString.parse(search);
 
     const getBusinesses = async () => {
-        // const json = await axios.get('http://www.objgen.com/json/models/UsU');
-        const json = Json;
-        setBusinesses(json);
-        // insertPreRef(json);
-        setLoadingMain(false);
+        const json = await axios({
+            url: `http://localhost:8090/boot/businesses?search=asdf`,
+            method: 'GET'
+        });
+        console.log(json);
+        // setBusinesses(json);
+        // setLoadingMain(false);
     }
     const onClick = () => {
         const sub = dataRef.current.length - shown;
@@ -68,7 +71,7 @@ function SearchDetail() {
         return () => {window.removeEventListener('scroll',handleScroll)};
     });
     useEffect(()=>{
-        // getBusinesses();
+        getBusinesses();
         dataRef.current = Json.data;
         if(dataRef.current.length >= 5){
             const json = dataRef.current.slice(0, 5);
@@ -92,16 +95,17 @@ function SearchDetail() {
         <div className={styles.wrap}>
             <button onClick={clickTop} id={btnActive? styles.btnActive : styles.btn}><FaArrowCircleUp/></button>
             <header>
-                1
+                <Search ss={'keyword'}/>
             </header>
             <section>
-                <div className={styles.sectionWrap}>
-                    <MapContainer array={businesses} references={businessRef.current}/>
+                <div className={styles.mapWrap}>
+                    <MapContainer array={businesses} references={businessRef.current} shown={shown}/>
                 </div>
-                    <div className={styles.sectionWrap}>
+                <div className={styles.contentWrap}>
                     {loadingMain ? <h1>Loadings...</h1>:
                         noExist ? <h2>검색 결과가 없습니다</h2> :
                         <>
+                            <div id={styles.searchFor}>{`Search For '${keyword}'`}</div>
                             {businesses.map((business,itx)=>(<Business key = {`${business.eno}${itx}`} references={businessRef} business={business}/>))}
                             {more ? 
                                 <div id={styles.moreButtonWrap}>
@@ -109,14 +113,15 @@ function SearchDetail() {
                                         <FaAngleDoubleDown/>
                                     </button>
                                 </div>
-                                : null
+                                :
+                                <div id={styles.emptyBox}>
+                                </div>
                             }
                         </>
                     }
                 </div>
             </section>
             <footer>
-                1
             </footer>
         </div>
     );
