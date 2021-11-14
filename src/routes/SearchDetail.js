@@ -1,6 +1,6 @@
 import {useEffect, useState, useRef, Fragment} from 'react';
 import { useLocation } from 'react-router-dom';
-import {FaArrowCircleUp, FaAngleDoubleDown} from 'react-icons/fa';
+import {FaAngleDoubleDown} from 'react-icons/fa';
 import queryString from 'query-string';
 import axios from 'axios';
 
@@ -9,6 +9,7 @@ import Business from '../components/Business';
 import Search from '../components/Search';
 import Json from '../components/dummy.json';
 import styles from '../css/SearchDetail.module.css';
+import ScrollTopButton from '../components/ScrollTopButton';
 
 function SearchDetail() {
     const [loadingMain,setLoadingMain] = useState(true);
@@ -16,8 +17,6 @@ function SearchDetail() {
     const [noExist, setNoExist] = useState(true);
     const [more, setMore] = useState(true);
     const [shown,setShown] = useState(0);
-    const [scrollY,setScrollY] = useState(0);
-    const [btnActive, setbtnActive] = useState(false);
 
     const businessRef = useRef([]);
     const dataRef = useRef([]);
@@ -26,7 +25,7 @@ function SearchDetail() {
 
     const getBusinesses = async () => {
         const json = await axios({
-            url: `http://localhost:8090/boot/businesses?search=asdf`,
+            url: `http://localhost:8090/boot/businesses?search=${keyword.current.search}`,
             method: 'GET'
         });
         console.log(json);
@@ -46,31 +45,8 @@ function SearchDetail() {
             setMore(false);
         }
     }
-    const watch= () => {
-        window.addEventListener('scroll', handleScroll);
-    };
-    const handleScroll = () => {
-        setScrollY(window.scrollY);
-        if(scrollY > 100) {
-            setbtnActive(true);
-        } else{
-            setbtnActive(false);
-        }
-    };
-    const clickTop = () => {
-        window.scrollTo({
-            top: 0,
-            behavior: "smooth"
-        });
-        setScrollY(0);
-        setbtnActive(false);
-    };
-    
     useEffect(()=>{
-        watch();
-        return () => {window.removeEventListener('scroll',handleScroll)};
-    });
-    useEffect(()=>{
+        keyword.current = queryString.parse(search);
         getBusinesses();
         dataRef.current = Json.data;
         if(dataRef.current.length >= 5){
@@ -93,11 +69,11 @@ function SearchDetail() {
 
     return (
         <div className={styles.wrap}>
-            <button onClick={clickTop} id={btnActive? styles.btnActive : styles.btn}><FaArrowCircleUp/></button>
             <header>
                 <Search ss={'keyword'}/>
             </header>
             <section>
+                <ScrollTopButton/>
                 <div className={styles.mapWrap}>
                     <MapContainer array={businesses} references={businessRef.current} shown={shown}/>
                 </div>
