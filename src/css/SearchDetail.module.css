@@ -4,11 +4,17 @@
     justify-content: center;
 }
 header{
-    position: fixed;
-    top:0;
-    left:0;
     width:100%;
     height: 10vh;
+    background-color: rgb(31, 28, 28);
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+nav{
+    width:100%;
+    height: 5vh;
     background-color: rgb(31, 28, 28);
     z-index: 10;
     display: flex;
@@ -48,25 +54,6 @@ footer{
 }
 #moreButton:hover {
     color: black;
-}
-#btn {
-    position: fixed; 
-    opacity: 0; 
-}
-#btnActive{
-    position: fixed;
-    opacity: 1; 
-    bottom: 3%; 
-    right: 3%;
-    width: 40px; 
-    height: 40px;
-    background-color: white;
-    font-size: 30px;
-    color: lightslategray;
-    border: 0;
-}
-#btnActive:hover{
-    color:black;
 }
 .contentWrap{
     margin-top:30px;

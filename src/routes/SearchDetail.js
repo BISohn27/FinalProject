@@ -10,6 +10,8 @@ import Search from '../components/Search';
 import Json from '../components/dummy.json';
 import styles from '../css/SearchDetail.module.css';
 import ScrollTopButton from '../components/ScrollTopButton';
+import Navigation from '../components/Navigation';
+import Header from '../components/Header';
 
 function SearchDetail() {
     const [loadingMain,setLoadingMain] = useState(true);
@@ -20,12 +22,12 @@ function SearchDetail() {
 
     const businessRef = useRef([]);
     const dataRef = useRef([]);
-    const keyword = useRef("");
     const {search} = useLocation();
+    const keyword = useRef(queryString.parse(search).search);
 
     const getBusinesses = async () => {
         const json = await axios({
-            url: `http://localhost:8090/boot/businesses?search=${keyword.current.search}`,
+            url: `http://localhost:8090/boot/businesses?search=${keyword}`,
             method: 'GET'
         });
         console.log(json);
@@ -46,7 +48,6 @@ function SearchDetail() {
         }
     }
     useEffect(()=>{
-        keyword.current = queryString.parse(search);
         getBusinesses();
         dataRef.current = Json.data;
         if(dataRef.current.length >= 5){
@@ -66,12 +67,15 @@ function SearchDetail() {
         }
         setLoadingMain(false);
     },[]);
-
     return (
         <div className={styles.wrap}>
-            <header>
-                <Search ss={'keyword'}/>
-            </header>
+            <Header search={keyword.current}/>
+            {/* <header>
+                <Search search={keyword.current}/>
+            </header> */}
+            <nav>
+                <Navigation search={keyword.current}/>
+            </nav>
             <section>
                 <ScrollTopButton/>
                 <div className={styles.mapWrap}>
