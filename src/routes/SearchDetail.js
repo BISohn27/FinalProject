@@ -27,7 +27,7 @@ function SearchDetail() {
 
     const getBusinesses = async () => {
         const json = await axios({
-            url: `http://localhost:8090/boot/businesses?search=${keyword}`,
+            url: `http://localhost:8090/boot/businesses?search=${keyword.current}`,
             method: 'GET'
         });
         console.log(json);
@@ -85,7 +85,7 @@ function SearchDetail() {
                     {loadingMain ? <h1>Loadings...</h1>:
                         noExist ? <h2>검색 결과가 없습니다</h2> :
                         <>
-                            <div id={styles.searchFor}>{`Search For '${keyword}'`}</div>
+                            <div id={styles.searchFor}>{`Search For '${keyword.current}'`}</div>
                             {businesses.map((business,itx)=>(<Business key = {`${business.eno}${itx}`} references={businessRef} business={business}/>))}
                             {more ? 
                                 <div id={styles.moreButtonWrap}>
