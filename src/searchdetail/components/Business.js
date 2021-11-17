@@ -1,6 +1,6 @@
 import {useRef, useEffect, useState} from 'react';
 import styles from '../css/Business.module.css';
-import {ProgressBar, Popover, OverlayTrigger} from 'react-bootstrap'
+import {ProgressBar, Popover, OverlayTrigger, Image } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Info from './Info';
@@ -29,10 +29,9 @@ function Business({business, references}) {
     return (
         <div className={styles.wrap}>
             <Info direction={directionRef.current} infoState={infoState} content={business.ename}/>
-            <div ref={elementRef} className={styles.img} onMouseOver={onMouseOver} onMouseOut={onMouseOut} onWheel={onWheel}>
-                <img src ={business.img} alt={business.ename}/>
+            <div ref={elementRef} className={styles.imgBox} onMouseOver={onMouseOver} onMouseOut={onMouseOut} onWheel={onWheel}>
+              <img className={styles.img} src={`http://localhost:8090/boot/businesses/images/${business.eimage}`} alt={business.ename}/>
             </div>
-            
               <div className={styles.textBox}>
                 <Link to={`/business/${business.eno}`} className={styles.link}>
                   <div className={styles.linkText}>{business.ename}</div>
@@ -55,7 +54,7 @@ function Business({business, references}) {
                     </Popover>
                   }
                 >
-                  <ProgressBar animated className={styles.progressBar} now={business.seat/25 * 100} label={`${Math.round(business.seat/25 * 100)}%`} />
+                  <ProgressBar animated className={styles.progressBar} now={business.seat === 0 ? 0: (business.occupied/business.seat * 100)} label={`${Math.round(business.seat === 0 ? 0: (business.occupied/business.seat * 100))}%`} />
                 </OverlayTrigger>
               ))}
 </>

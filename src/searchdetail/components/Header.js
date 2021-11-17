@@ -1,13 +1,15 @@
 import {useState, useEffect} from 'react';
 import styles from '../css/Header.module.css';
+import { useMediaQuery } from 'react-responsive';
 
 import Search from '../components/Search';
 
 function Header({search}) {
     const [scrollY,setScrollY] = useState(0);
     const [headerActive, setHeaderActive] = useState(false);
-    // const [keyword,setKeyword] = useState(search);
-    const watch= () => {
+    const isMobile = useMediaQuery({ maxWidth: 767 });
+    
+    const watch = isMobile ? () => {} : () => {
         window.addEventListener('scroll', handleScroll);
     };
     const handleScroll = () => {
@@ -21,7 +23,8 @@ function Header({search}) {
     
     useEffect(()=>{
         watch();
-        return () => {window.removeEventListener('scroll',handleScroll)};
+        const returnFunction = isMobile ? null : () => {window.removeEventListener('scroll',handleScroll)};
+        return returnFunction;
     });
 
     return (

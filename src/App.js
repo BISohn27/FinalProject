@@ -1,5 +1,5 @@
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
-import SearchDetail from "./routes/SearchDetail";
+import SearchDetail from "./searchdetail/routes/SearchDetail";
 
 function App() {
   return (

@@ -1,17 +1,17 @@
 import {useEffect, useState, useRef, Fragment} from 'react';
 import { useLocation } from 'react-router-dom';
+import { useMediaQuery } from 'react-responsive';
 import {FaAngleDoubleDown} from 'react-icons/fa';
 import queryString from 'query-string';
 import axios from 'axios';
 
 import MapContainer from '../components/MapContainer';
 import Business from '../components/Business';
-import Search from '../components/Search';
-import Json from '../components/dummy.json';
 import styles from '../css/SearchDetail.module.css';
 import ScrollTopButton from '../components/ScrollTopButton';
 import Navigation from '../components/Navigation';
 import Header from '../components/Header';
+import MenuButton from "../components/MenuButton";
 
 function SearchDetail() {
     const [loadingMain,setLoadingMain] = useState(true);
@@ -25,31 +25,16 @@ function SearchDetail() {
     const {search} = useLocation();
     const keyword = useRef(queryString.parse(search).search);
 
+    const isMobile = useMediaQuery({ maxWidth: 767 });
+
     const getBusinesses = async () => {
         const json = await axios({
             url: `http://localhost:8090/boot/businesses?search=${keyword.current}`,
             method: 'GET'
         });
-        console.log(json);
-        // setBusinesses(json);
-        // setLoadingMain(false);
-    }
-    const onClick = () => {
-        const sub = dataRef.current.length - shown;
-        if(sub >= 5){
-            setBusinesses(businesses.concat(dataRef.current.slice(shown, shown+5)));
-            setShown(shown+5);
-        } else if(sub>0 && sub < 5){
-            setBusinesses(businesses.concat(dataRef.current.slice(shown, shown+sub)));
-            setShown(shown+sub);
-            setMore(false);
-        } else {
-            setMore(false);
-        }
-    }
-    useEffect(()=>{
-        getBusinesses();
-        dataRef.current = Json.data;
+        dataRef.current = json.data;
+        setLoadingMain(false);
+        
         if(dataRef.current.length >= 5){
             const json = dataRef.current.slice(0, 5);
             setShown(5);
@@ -66,13 +51,28 @@ function SearchDetail() {
             setMore(false);
         }
         setLoadingMain(false);
+    }
+    const onClick = () => {
+        const sub = dataRef.current.length - shown;
+        if(sub >= 5){
+            setBusinesses(businesses.concat(dataRef.current.slice(shown, shown+5)));
+            setShown(shown+5);
+        } else if(sub>0 && sub < 5){
+            setBusinesses(businesses.concat(dataRef.current.slice(shown, shown+sub)));
+            setShown(shown+sub);
+            setMore(false);
+        } else {
+            setMore(false);
+        }
+    }
+    useEffect(()=>{
+        getBusinesses();
     },[]);
+    
     return (
         <div className={styles.wrap}>
+            {isMobile ? <MenuButton search={keyword.current}/> : null}
             <Header search={keyword.current}/>
-            {/* <header>
-                <Search search={keyword.current}/>
-            </header> */}
             <nav>
                 <Navigation search={keyword.current}/>
             </nav>
