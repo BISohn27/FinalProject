@@ -19,23 +19,29 @@ function SearchDetail() {
     const [noExist, setNoExist] = useState(true);
     const [more, setMore] = useState(true);
     const [shown,setShown] = useState(0);
+    const [redirect,setRedirect] = useState(false);
 
     const businessRef = useRef([]);
     const dataRef = useRef([]);
     const {search} = useLocation();
     const keyword = useRef(queryString.parse(search).search);
+    const option = useRef(queryString.parse(search).option);
 
     const isMobile = useMediaQuery({ maxWidth: 767 });
 
     const getBusinesses = async () => {
         const json = await axios({
-            url: `http://localhost:8090/boot/businesses?search=${keyword.current}`,
+            url: `http://localhost:8090/search?q=${keyword.current}&option=${option.current}`,
             method: 'GET'
         });
         dataRef.current = json.data;
         setLoadingMain(false);
         
-        if(dataRef.current.length >= 5){
+        if(redirect === true && dataRef.current.length === 0){
+            setBusinesses(dataRef.current);
+            setMore(false);
+            setNoExist(true);
+        } else if(dataRef.current.length >= 5){
             const json = dataRef.current.slice(0, 5);
             setShown(5);
             setBusinesses(json);
@@ -65,16 +71,19 @@ function SearchDetail() {
             setMore(false);
         }
     }
+
     useEffect(()=>{
+        keyword.current = queryString.parse(search).search;
+        option.current = queryString.parse(search).option;
         getBusinesses();
-    },[]);
+    },[search]);
     
     return (
         <div className={styles.wrap}>
-            {isMobile ? <MenuButton search={keyword.current}/> : null}
+            {isMobile ? <MenuButton search={keyword.current} state={setRedirect}/> : null}
             <Header search={keyword.current}/>
             <nav>
-                <Navigation search={keyword.current}/>
+                <Navigation search={keyword.current} state={setRedirect}/>
             </nav>
             <section>
                 <ScrollTopButton/>

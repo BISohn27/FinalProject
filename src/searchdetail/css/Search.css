@@ -71,6 +71,13 @@ input:focus{
     -ms-transform: scale(1.2);
     -o-transform: scale(1.2);
 }
+#linkSearch{
+    height:100%;
+    color: rgb(160, 160, 160);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
 @media screen and (max-width:767px){
     input{
@@ -106,7 +113,6 @@ input:focus{
         height:80%;
         font-size: small;
         color: rgb(160, 160, 160);
-        padding-right:10px;
     }
     #barrierActive{
         opacity:1;

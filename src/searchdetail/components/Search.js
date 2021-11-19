@@ -1,6 +1,7 @@
 import { BsXLg,BsSearch } from "react-icons/bs";
 import { FaMicrophoneAlt } from "react-icons/fa";
 import {useState, useRef, useEffect} from "react";
+import {Link} from "react-router-dom";
 import '../css/Search.css';
 
 function Search({search}) {
@@ -10,11 +11,15 @@ function Search({search}) {
     const onChange = (event) => {
         setKeyword(event.target.value);
     }
-    const onClick = () => {
+    const clickReset = () => {
         setKeyword("");
         setKeywordState(true);
-    }
+    };
+    // const clickSearch = () => {
+    //     Router.push(`/business?search=${keyword}`);
+    // }
     useEffect(()=>{
+        if(typeof keyword === "string")
         if(keyword === '' || keyword.length === 0) {
             setKeywordState(true);
         }else{
@@ -28,14 +33,14 @@ function Search({search}) {
                 <input type="text" value={keyword} onChange={onChange}/>
             </div>
             <div id={keywordState ? "resetInactive":"reset"}>
-                <BsXLg onClick={onClick}/>
+                <BsXLg onClick={clickReset}/>
             </div>
             <div id={keywordState ? "barrierInactive":"barrierActive"}></div>
             <div id="microphone">
                 <FaMicrophoneAlt/>
             </div>
             <div id="searchIcon">
-                <BsSearch/>
+                <Link id="linkSearch" to={`/businesses?search=${keyword}`}><BsSearch id="searchIcon"/></Link>
             </div>
         </div>
     );
