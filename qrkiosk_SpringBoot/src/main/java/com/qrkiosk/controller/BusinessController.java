@@ -40,9 +40,8 @@ public class BusinessController {
 	
 	//search system by Elasticsearch
 	@CrossOrigin(origins = "*", allowedHeaders = "*")
-	@GetMapping("/search")
+	@GetMapping("/enterprises")
 	public ResponseEntity<List<BusinessDocument>> findBusinessBySearchInCafe(@RequestParam(value = "q") String q,@RequestParam(value = "option") String option) {
-		System.out.println(option);
 		List<BusinessDocument> list = null;
 		if(option.equals("undefined")) {
 			list =  service.findBusinessByKeyword(q);
@@ -53,7 +52,6 @@ public class BusinessController {
 		} else {
 			list = null;
 		}
-		//else if(option.equals("region")) {} 
 		
 		if(list != null) {
 			for(BusinessDocument business : list) {
@@ -63,21 +61,22 @@ public class BusinessController {
 		}
 		return new ResponseEntity<>(list,HttpStatus.BAD_REQUEST.OK);
 	}
-	
-	
-	//mysql like search by concat method
-	@CrossOrigin(origins = "*", allowedHeaders = "*")
-	@GetMapping("/boot/businesses")
-	public ResponseEntity<List<BusinessVO>> getBusinesses(@RequestParam String search) {
-		search = search.replace(" ", "|");
-		System.out.println(search);
-		List<BusinessVO> list = businessDao.getBusinessList(search);
-		
-		for(BusinessVO business : list) {
-			business.setSeat(tableDao.getSeatNum(business.getEno()));
-			business.setOccupied(tableDao.getOccupiedNum(business.getEno()));
-		}
-		
-		return new ResponseEntity<>(list,HttpStatus.BAD_REQUEST.OK);
-	}
 }
+
+
+
+////mysql like search by concat method
+//@CrossOrigin(origins = "*", allowedHeaders = "*")
+//@GetMapping("/boot/businesses")
+//public ResponseEntity<List<BusinessVO>> getBusinesses(@RequestParam String search) {
+//	search = search.replace(" ", "|");
+//	System.out.println(search);
+//	List<BusinessVO> list = businessDao.getBusinessList(search);
+//	
+//	for(BusinessVO business : list) {
+//		business.setSeat(tableDao.getSeatNum(business.getEno()));
+//		business.setOccupied(tableDao.getOccupiedNum(business.getEno()));
+//	}
+//	
+//	return new ResponseEntity<>(list,HttpStatus.BAD_REQUEST.OK);
+//}
