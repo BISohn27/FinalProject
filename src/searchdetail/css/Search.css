@@ -25,13 +25,6 @@ input{
     font-size:large;
     color: rgb(160, 160, 160);
 }
-#microphone{
-    display:flex;
-    align-items: center;
-    height:80%;
-    font-size:large;
-    color: rgb(160, 160, 160);
-}
 #searchIcon{
     display:flex;
     align-items: center;

@@ -3,8 +3,12 @@ import { useMediaQuery } from 'react-responsive';
 
 const { kakao } = window;
 
-function MapContainer ({array, references, shown}) {
+function MapContainer ({array, references, shown, }) {
     const isMobile = useMediaQuery({ maxWidth: 767 });
+    const map = {
+        width: '70%', 
+        height: isMobile ? '30vh': '40vh'
+    };
 
     useEffect(()=>{
             const mapContainer = document.getElementById('map'), // 지도를 표시할 div  
@@ -70,10 +74,7 @@ function MapContainer ({array, references, shown}) {
     },[array]);
 
     return (
-        <div id='map' style={{
-            width: '70%', 
-            height: isMobile ? '30vh': '40vh'
-        }}></div>
+        <div id='map' style={map}></div>
     )
 }
 

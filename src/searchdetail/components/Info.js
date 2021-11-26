@@ -6,7 +6,7 @@ function Info({direction, infoState, content}) {
     return (
         <div className={styles.info} style={infoState ? infoActive : infoInactive}>
             <div className={styles.title}></div>
-            <div className={styles.content}>{content}</div>
+            <div className={styles.content}>{content.ecategory}</div>
         </div>
     );
 }

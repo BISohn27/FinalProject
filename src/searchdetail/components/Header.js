@@ -4,7 +4,7 @@ import { useMediaQuery } from 'react-responsive';
 
 import Search from '../components/Search';
 
-function Header({search}) {
+function Header({search,state}) {
     const [scrollY,setScrollY] = useState(0);
     const [headerActive, setHeaderActive] = useState(false);
     const isMobile = useMediaQuery({ maxWidth: 767 });
@@ -29,7 +29,7 @@ function Header({search}) {
 
     return (
         <div id={headerActive? styles.headerActive : styles.header}>
-            <Search search={search} />
+            <Search search={search} state={state}/>
         </div>
     );
 }

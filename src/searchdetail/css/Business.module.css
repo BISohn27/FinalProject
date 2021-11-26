@@ -10,6 +10,8 @@
     display:flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
+    width:50%;
 }
 .seatAvailable{
     width: 10%;
@@ -21,6 +23,8 @@
 .link{
     text-decoration: none;
     color: black;
+    font-weight:bolder;
+    padding-bottom: 10px;
 }
 link:hover{
     color:lightgray;
@@ -35,6 +39,10 @@ link:hover{
 .img{
     width: 200px;
     height: 150px;
+}
+.addressText{
+    display: flex;
+    flex-wrap:wrap;
 }
 @media screen and (max-width:767px){
     .wrap{
@@ -51,6 +59,7 @@ link:hover{
         flex-direction: column;
         justify-content: center;
         align-items: center;
+        width:70%;
     }
     .seatAvailable{
         margin: 10px 0px;
@@ -59,5 +68,12 @@ link:hover{
         display:flex;
         flex-direction: column;
         justify-content: center;
+    }
+    .imgBox{
+        padding:0;
+    }
+    .addressText{
+        display: flex;
+        flex-wrap:nowrap;
     }
 }

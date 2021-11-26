@@ -23,10 +23,10 @@ function MenuButton({search,state}) {
         <div>
             <button onClick={onClick}><FaBars id={styles.icon}/></button>
             <ul id = {menuState ? styles.menuBarActive : styles.menuBar}>
-                <li className={styles.li}><Link className={styles.link} to={`/businesses?search=${keyword}`} onClick={clickLink}><span className={styles.iconSpan}><MdManageSearch/></span>통합검색</Link></li>
-                {/* <li className={styles.li}><Link className={styles.link} to={`/businesses?search=${keyword}&option=region`} onClick={clickLink}><span className={styles.iconSpan}><MdOutlineMap/></span>도시 및 지역</Link></li> */}
-                <li className={styles.li}><Link className={styles.link} to={`/businesses?search=${keyword}&option=rest`} onClick={clickLink}><span className={styles.iconSpan}><MdFlatware/></span>음식점</Link></li>
-                <li className={styles.li}><Link className={styles.link} to={`/businesses?search=${keyword}&option=cafe`} onClick={clickLink}><span className={styles.iconSpan}><MdCoffee/></span>카페</Link></li>
+                <li className={styles.li}><Link className={styles.link} to={`/enterprises?search=${keyword}`} onClick={clickLink}><span className={styles.iconSpan}><MdManageSearch/></span>통합검색</Link></li>
+                {/* <li className={styles.li}><Link className={styles.link} to={`/enterprises?search=${keyword}&option=region`} onClick={clickLink}><span className={styles.iconSpan}><MdOutlineMap/></span>도시 및 지역</Link></li> */}
+                <li className={styles.li}><Link className={styles.link} to={`/enterprises?search=${keyword}&option=rest`} onClick={clickLink}><span className={styles.iconSpan}><MdFlatware/></span>음식점</Link></li>
+                <li className={styles.li}><Link className={styles.link} to={`/enterprises?search=${keyword}&option=cafe`} onClick={clickLink}><span className={styles.iconSpan}><MdCoffee/></span>카페</Link></li>
             </ul>
         </div>
     );
