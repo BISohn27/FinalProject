@@ -28,7 +28,6 @@ public class FinanceController {
 									@RequestParam("pt")String periodType,
 									@RequestParam("sp")String startPeriod,
 									@RequestParam("ep")String endPeriod){
-		
 		Map<String,Object> map = null;
 		if(categoryType.equals("sales")) {
 			if(periodCategory.equals("년도별 매출")) {

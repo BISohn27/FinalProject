@@ -27,14 +27,14 @@ function Finance () {
             url: `http://localhost:8080/enterprises/${eno}/finance?ct=${params.categoryType}&pc=${params.periodCategory}&pt=${params.periodType}&sp=${params.startPeriod}&ep=${params.endPeriod}`,
             method: 'GET'
         });
-        console.log(json);
+        setSales(json.data);
     };
     const getMenuSales = async() =>{
         const json = await axios({
-            url: `http://localhost:8080/enterprises/${eno}/finance?ct=${params.categoryType}&pc=${params.periodCategory}&pt=${params.periodType}&sp=${params.startPeriod}&ep=${params.endPeriod}&m==${params.menu}&mc=${params.menuCategory}`,
+            url: `http://localhost:8080/enterprises/${eno}/finance?ct=${params.categoryType}&pc=${params.periodCategory}&pt=${params.periodType}&sp=${params.startPeriod}&ep=${params.endPeriod}&m=${params.menu}&mc=${params.menuCategory}`,
             method: 'GET'
         });
-        console.log(json);
+        setSales(json.data);
     }
 
     useEffect(()=>{
@@ -44,17 +44,18 @@ function Finance () {
         if(params !== {} && params.categoryType === 'sales'){
             getSales();
         } else if(params !== {} && params.categoryType === 'menu'){
-            // getMenuSales();
-            console.log(params);
+            getMenuSales();
         }
     },[params])
 
+    console.log(sales);
     return (
     <div id={styles.wrap}>
         <h2>Analysis of The '{business.ename}'</h2>
         <Fragment>
             <SelectionBox businessNum={business.eno} setParams={setParams}/>
         </Fragment>
+        <Chart dataList={sales.sales} labelList={sales.label}/>
     </div>
     );
 }
