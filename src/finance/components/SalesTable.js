@@ -71,8 +71,8 @@ function Row(props) {
                     </TableRow>
                     </TableHead>
                     <TableBody>
-                    {row.list.map((order,idx) => (
-                        <TableRow key={order.idx}>
+                    {row.list.map((order) => (
+                        <TableRow key={order.odcode}>
                         <TableCell component="th" scope="row">
                             {order.otime}
                         </TableCell>
@@ -102,7 +102,6 @@ export default function SalesTable({salesList,keyList}) {
         setRows(keyList.map((key)=>createData(key,salesList)));
     },[keyList]);
 
-    console.log(rows);
     return (
         <TableContainer component={Paper}>
             <Table aria-label="collapsible table">
@@ -114,8 +113,8 @@ export default function SalesTable({salesList,keyList}) {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {rows.map((row,idx) => (
-                        <Row key={idx+10000} row={row} />
+                    {rows.map((row) => (
+                        <Row key={row.date} row={row} />
                     ))}
                 </TableBody>
             </Table>
