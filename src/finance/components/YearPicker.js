@@ -7,10 +7,10 @@ import { format } from "date-fns";
 import Box from '@mui/material/Box';
 
 
-export default function YearPicker({setEndPeriod, setStartPeriod}) {
+export default function YearPicker({setEndPeriod, setStartPeriod,endPeriod,startPeriod}) {
     const [startValue, setStartValue] = useState(null);
     const [endValue, setEndValue] = useState(null);
-
+    
     useEffect(()=>{
         if(typeof setEndPeriod ==='function'){
             setEndPeriod(endValue);
@@ -22,6 +22,18 @@ export default function YearPicker({setEndPeriod, setStartPeriod}) {
         }
     },[startValue]);
 
+    useEffect(()=>{
+        if(startPeriod === null){
+            setStartValue(null);
+        }
+    },[startPeriod]);
+
+    useEffect(()=>{
+        if(endPeriod === null){
+            setEndValue(null);
+        }
+    },[endPeriod]);
+    
     return (
         <Fragment>
             <Box sx={{ width: '13%' }}>

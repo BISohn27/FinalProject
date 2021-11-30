@@ -1,11 +1,14 @@
 import {useState,useEffect,Fragment} from 'react';
 import axios from 'axios';
+import Button from '@mui/material/Button';
+import SendIcon from '@mui/icons-material/Send';
 
 import styles from '../css/SelectionBox.module.css';
 import Selection from './Selection';
 import SelectionForPicker from './SelectionForPicker';
+import YearPicker from './YearPicker';
 
-function SelectionBox({businessNum,setParams}) {
+function SelectionBox({businessNum,setParams,dataState}) {
     const [firstCategoryValue, setFirstCategoryValue] = useState('');
     const [secondCategoryValue, setSecondCategoryValue] = useState('');
     const [thirdCategoryValue, setThirdCategoryValue] = useState('');
@@ -14,6 +17,7 @@ function SelectionBox({businessNum,setParams}) {
     const [thirdCategory, setThirdCategory] = useState([]);
     const [fourthCategory, setFourthCategory] = useState([]);
     const [firstCategoryState, setFirstCategoryState] = useState(0);
+    const [salesCheck, setSalesCheck] = useState(false);
 
     const [categoryType,setCategoryType] = useState('');
     const [periodCategory,setPeriodCategory] = useState('');
@@ -41,6 +45,7 @@ function SelectionBox({businessNum,setParams}) {
     }
     
     useEffect(()=>{
+        dataState(false);
         setStartPeriod(null);
         setEndPeriod(null);
         setFirstCategoryState(0);
@@ -51,10 +56,12 @@ function SelectionBox({businessNum,setParams}) {
         setFourthCategoryValue('');
         setThirdCategoryValue('');
         if(firstCategoryValue ==='총 매출'){
-            setSecondCategory(periodArray);
+            // setSecondCategory(periodArray);
+            setSalesCheck(true);
             setFirstCategoryState(1);
             setCategoryType('sales');
         }else if(firstCategoryValue === '메뉴별 매출'){
+            setSalesCheck(false);
             getMenuCategories();
             setFirstCategoryState(2);
             setCategoryType('menu');
@@ -62,6 +69,7 @@ function SelectionBox({businessNum,setParams}) {
     },[firstCategoryValue]);
 
     useEffect(()=>{
+        dataState(false);
         setStartPeriod(null);
         setEndPeriod(null);
         setFourthCategory([]);
@@ -69,20 +77,21 @@ function SelectionBox({businessNum,setParams}) {
         setFourthCategoryValue('');
         setThirdCategoryValue('');
         if(firstCategoryState === 1){
-            setPeriodCategory(secondCategoryValue);
+            // setPeriodCategory(secondCategoryValue);
         }else if(firstCategoryState === 2){
             if(secondCategoryValue !== undefined && secondCategoryValue !== null && secondCategoryValue !==''){
                 setMenuCategory(secondCategoryValue);
                 getMenuByCaterory();
-                setFourthCategory(periodArray);
+                // setFourthCategory(periodArray);
             }
         }
     },[secondCategoryValue]);
 
     useEffect(()=>{
+        dataState(false);
         setStartPeriod(null);
         setEndPeriod(null);
-        setFourthCategoryValue('');
+        // setFourthCategoryValue('');
         if(firstCategoryState === 2){
             if(thirdCategoryValue !== undefined && thirdCategoryValue !== null && thirdCategoryValue !==''){
                 setMenu(thirdCategoryValue);
@@ -90,55 +99,95 @@ function SelectionBox({businessNum,setParams}) {
         }
     },[thirdCategoryValue]);
 
-    useEffect(()=>{
-        if(firstCategoryState === 2){
-            if(fourthCategoryValue !== undefined && fourthCategoryValue !== null && fourthCategoryValue !==''){
-                setPeriodCategory(fourthCategoryValue);
-            }
-        }
-    },[fourthCategoryValue]);
+    // useEffect(()=>{
+    //     dataState(false);
+    //     if(firstCategoryState === 2){
+    //         if(fourthCategoryValue !== undefined && fourthCategoryValue !== null && fourthCategoryValue !==''){
+    //             setPeriodCategory(fourthCategoryValue);
+    //         }
+    //     }
+    // },[fourthCategoryValue]);
 
-    useEffect(()=>{
-        if(startPeriod !== null && endPeriod !== null){
-            if(categoryType === 'sales')
-            {
-                setParams({
-                    categoryType: categoryType,
-                    periodCategory: periodCategory,
-                    periodType: periodType,
-                    startPeriod: startPeriod,
-                    endPeriod: endPeriod,
-                });
+    // useEffect(()=>{
+    //     if(startPeriod !== null && endPeriod !== null){
+    //         if(categoryType === 'sales')
+    //         {
+    //             setParams({
+    //                 categoryType: categoryType,
+    //                 periodCategory: periodCategory,
+    //                 periodType: periodType,
+    //                 startPeriod: startPeriod,
+    //                 endPeriod: endPeriod,
+    //             });
+    //             dataState(true);
+    //         }else if(categoryType === 'menu'){
+    //             setParams({
+    //                 categoryType: categoryType,
+    //                 menuCategory: menuCategory,
+    //                 menu: menu,
+    //                 periodCategory: periodCategory,
+    //                 periodType: periodType,
+    //                 startPeriod: startPeriod,
+    //                 endPeriod: endPeriod,
+    //             });
+    //             dataState(true);
+    //         }
+    //     }
+    // },[startPeriod,endPeriod]);
+
+    const onClick = () =>{
+            if(categoryType === 'sales'){
+                if(startPeriod === null || endPeriod === null){
+                    alert('조건을 선택해 주세요.');
+                } else{
+                    setParams({
+                        categoryType: categoryType,
+                        periodCategory: periodCategory,
+                        periodType: periodType,
+                        startPeriod: startPeriod,
+                        endPeriod: endPeriod,
+                    });
+                    dataState(true);
+                }
             }else if(categoryType === 'menu'){
-                setParams({
-                    categoryType: categoryType,
-                    menuCategory: menuCategory,
-                    menu: menu,
-                    periodCategory: periodCategory,
-                    periodType: periodType,
-                    startPeriod: startPeriod,
-                    endPeriod: endPeriod,
-                });
+                if(startPeriod === null || endPeriod === null || menuCategory === '' || menu === ''){
+                    alert('조건을 선택해 주세요.');
+                } else{
+                    setParams({
+                        categoryType: categoryType,
+                        menuCategory: menuCategory,
+                        menu: menu,
+                        periodCategory: periodCategory,
+                        periodType: periodType,
+                        startPeriod: startPeriod,
+                        endPeriod: endPeriod,
+                    });
+                    dataState(true);
+                }
             }
-        }
-    },[startPeriod,endPeriod]);
+    };
 
     return (
         <div id={styles.wrap}>
             <Selection category={['총 매출', '메뉴별 매출']} value={firstCategoryValue} setCategory={setFirstCategoryValue}/>
-            <Selection category={secondCategory} value={secondCategoryValue} setCategory={setSecondCategoryValue}/>
+            {salesCheck? <YearPicker setStartPeriod={setStartPeriod} setEndPeriod={setEndPeriod} startPeriod={startPeriod} endPeriod={endPeriod}/>:<Selection category={secondCategory} value={secondCategoryValue} setCategory={setSecondCategoryValue}/>}
             {firstCategoryState === 0 ? null 
                 : 
-                firstCategoryState === 1 ? 
-                    <SelectionForPicker categories={[firstCategoryValue,secondCategoryValue]} setStartPeriod={setStartPeriod} setEndPeriod={setEndPeriod} setPeriodType={setPeriodType}/>
+                firstCategoryState === 1 ?
+                    null 
+                    // <SelectionForPicker categories={[firstCategoryValue,secondCategoryValue]} setStartPeriod={setStartPeriod} setEndPeriod={setEndPeriod} setPeriodType={setPeriodType}/>
                     :
                     //<SelectionForPicker categories={[firstCategoryValue,secondCategoryValue]}/>
                     <Fragment>
                         <Selection category={thirdCategory} value={thirdCategoryValue} setCategory={setThirdCategoryValue}/>
-                        <Selection Selection category={fourthCategory} value={fourthCategoryValue} setCategory={setFourthCategoryValue}/>
-                        <SelectionForPicker categories={[firstCategoryValue,secondCategoryValue,thirdCategoryValue,fourthCategoryValue]} setStartPeriod={setStartPeriod} setEndPeriod={setEndPeriod} setPeriodType={setPeriodType}/>
+                        {/* <Selection Selection category={fourthCategory} value={fourthCategoryValue} setCategory={setFourthCategoryValue}/> */}
+                        {/* <SelectionForPicker categories={[firstCategoryValue,secondCategoryValue,thirdCategoryValue,fourthCategoryValue]} setStartPeriod={setStartPeriod} setEndPeriod={setEndPeriod} setPeriodType={setPeriodType}/> */}
+                        <YearPicker setStartPeriod={setStartPeriod} setEndPeriod={setEndPeriod} startPeriod={startPeriod} endPeriod={endPeriod}/>
                     </Fragment>
             }
+                {<Button variant="outlined" endIcon={<SendIcon /> } onClick={onClick}>
+                    Send
+                </Button>}
         </div>
     );
 }

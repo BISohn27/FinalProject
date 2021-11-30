@@ -20,7 +20,7 @@ function SearchDetail() {
     const [more, setMore] = useState(true);
     const [shown,setShown] = useState(0);
     const [redirect,setRedirect] = useState(false);
-
+    
     const businessRef = useRef([]);
     const dataRef = useRef([]);
     const {search} = useLocation();
@@ -28,7 +28,6 @@ function SearchDetail() {
     const option = useRef(queryString.parse(search).option);
 
     const isMobile = useMediaQuery({ maxWidth: 767 });
-
     const getBusinesses = async () => {
         const json = await axios({
             url: `http://118.67.142.194:8080/enterprises?q=${keyword.current}&option=${option.current}`,
@@ -75,9 +74,12 @@ function SearchDetail() {
     useEffect(()=>{
         keyword.current = queryString.parse(search).search;
         option.current = queryString.parse(search).option;
+        if(redirect === true){
+            businessRef.current= [];
+        }
         getBusinesses();
     },[search]);
-    
+
     return (
         <div className={styles.wrap}>
             {isMobile ? <MenuButton search={keyword.current} state={setRedirect}/> : null}
@@ -88,7 +90,7 @@ function SearchDetail() {
             <section id={styles.section}>
                 <ScrollTopButton/>
                 <div className={styles.mapWrap}>
-                    <MapContainer array={businesses} references={businessRef.current} shown={shown}/>
+                    <MapContainer array={businesses} references={businessRef.current} shown={shown} redirectState={redirect}/>
                 </div>
                 <div className={styles.contentWrap}>
                     {loadingMain ? <h1>Loadings...</h1>:
