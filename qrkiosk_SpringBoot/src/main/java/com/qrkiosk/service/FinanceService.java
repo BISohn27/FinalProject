@@ -1,6 +1,9 @@
 package com.qrkiosk.service;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,6 +12,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.qrkiosk.domain.ReportViewVO;
 import com.qrkiosk.mapper.FinanceDAO;
 
 @Service
@@ -336,6 +340,33 @@ public class FinanceService {
 			
 		return map;
 	}
+	
+	public Map<String,List<ReportViewVO>> getSalesList(int eno, String startPeriod, String endPeriod){
+		Map<String,List<ReportViewVO>> map = new HashMap<>();
+		List<ReportViewVO> list = null;
+		List<ReportViewVO> temp = null;
+		LocalDate compare = LocalDate.of(2000, 01, 01);
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		
+		temp = mapper.getSalesReport(eno, startPeriod, endPeriod);
+		
+		for(ReportViewVO rv : temp) {
+			LocalDate rvDate = LocalDateTime.parse(rv.getOtime(), formatter).toLocalDate();
+			if(compare.isEqual(rvDate)) {
+				list.add(rv);
+			} else {
+				compare = rvDate;
+				list = new ArrayList<>();
+				list.add(rv);
+				map.put(compare.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),list);
+			}
+		}
+		
+		map.put(compare.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),list);
+			
+		return map;
+	}
+	
 	
 	public boolean biggerDate(String startDate, String endDate) {
 		return Integer.parseInt(startDate.replace("-", "")) > Integer.parseInt(endDate.replace("-", ""));

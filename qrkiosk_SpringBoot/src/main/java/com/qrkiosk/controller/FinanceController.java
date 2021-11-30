@@ -1,5 +1,7 @@
 package com.qrkiosk.controller;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.qrkiosk.domain.ReportViewVO;
 import com.qrkiosk.service.FinanceService;
 
 import reactor.util.annotation.Nullable;
@@ -28,32 +31,48 @@ public class FinanceController {
 									@RequestParam("pt")String periodType,
 									@RequestParam("sp")String startPeriod,
 									@RequestParam("ep")String endPeriod){
-		Map<String,Object> map = null;
+		
+		Map<String,Object> map = new HashMap<>();
 		if(categoryType.equals("sales")) {
-			if(periodCategory.equals("년도별 매출")) {
-				map = fService.getSalesByYear(eno, startPeriod, endPeriod);
-			} else if(periodCategory.equals("분기별 매출")) {
-				map = fService.getSalesByQuater(eno,startPeriod,endPeriod);
-			} else if (periodCategory.equals("월별 매출")) {
-				map = fService.getSalesByMonth(eno, periodType, startPeriod, endPeriod);
-			} else if (periodCategory.equals("일별 매출")) {
-				
-			}else if (periodCategory.equals("시간별 매출")) {
-				map = fService.getSalesByTime(eno, periodType, startPeriod, endPeriod);
-			}
+			map.put("year",fService.getSalesByYear(eno, startPeriod, endPeriod));
+			map.put("quater", fService.getSalesByQuater(eno,startPeriod,endPeriod));
+			map.put("month", fService.getSalesByMonth(eno, "Year", startPeriod, endPeriod));
+			map.put("time", fService.getSalesByTime(eno, "Year", startPeriod, endPeriod));
 		}else if(categoryType.equals("menu")) {
-			if(periodCategory.equals("년도별 매출")) {
-				map = fService.getMenuSalesByYear(eno, startPeriod, endPeriod, menu);
-			} else if(periodCategory.equals("분기별 매출")) {
-				map = fService.getMenuSalesByQuater(eno, startPeriod, endPeriod, menu);
-			} else if (periodCategory.equals("월별 매출")) {
-				map = fService.getMenuSalesByMonth(eno, periodType, startPeriod, endPeriod, menu);
-			} else if (periodCategory.equals("일별 매출")) {
-				
-			}else if (periodCategory.equals("시간별 매출")) {
-				map = fService.getMenuSalesByTime(eno, periodType, startPeriod, endPeriod, menu);
-			}
+			map.put("year",fService.getMenuSalesByYear(eno, startPeriod, endPeriod, menu));
+			map.put("quater", fService.getMenuSalesByQuater(eno, startPeriod, endPeriod, menu));
+			map.put("month", fService.getMenuSalesByMonth(eno, "Year", startPeriod, endPeriod, menu));
+			map.put("time", fService.getMenuSalesByTime(eno, "Year", startPeriod, endPeriod, menu));
 		}
+		
+		Map<String,List<ReportViewVO>> temp = fService.getSalesList(eno, startPeriod, endPeriod);
+		map.put("saleslist", temp);
+		map.put("keylist", temp.keySet());
+		
 		return map;
 	}
 }
+
+//if(periodCategory.equals("년도별 매출")) {
+//	map = fService.getMenuSalesByYear(eno, startPeriod, endPeriod, menu);
+//} else if(periodCategory.equals("분기별 매출")) {
+//	map = fService.getMenuSalesByQuater(eno, startPeriod, endPeriod, menu);
+//} else if (periodCategory.equals("월별 매출")) {
+//	map = fService.getMenuSalesByMonth(eno, periodType, startPeriod, endPeriod, menu);
+//} else if (periodCategory.equals("일별 매출")) {
+//	
+//}else if (periodCategory.equals("시간별 매출")) {
+//	map = fService.getMenuSalesByTime(eno, periodType, startPeriod, endPeriod, menu);
+//}
+
+//if(periodCategory.equals("년도별 매출")) {
+//	map = fService.getSalesByYear(eno, startPeriod, endPeriod);
+//} else if(periodCategory.equals("분기별 매출")) {
+//	map = fService.getSalesByQuater(eno,startPeriod,endPeriod);
+//} else if (periodCategory.equals("월별 매출")) {
+//	map = fService.getSalesByMonth(eno, periodType, startPeriod, endPeriod);
+//} else if (periodCategory.equals("일별 매출")) {
+//	
+//}else if (periodCategory.equals("시간별 매출")) {
+//	map = fService.getSalesByTime(eno, periodType, startPeriod, endPeriod);
+//}

@@ -1,8 +1,12 @@
 package com.qrkiosk.mapper;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+
+import com.qrkiosk.domain.ReportViewVO;
 
 @Mapper
 public interface FinanceDAO {
@@ -27,4 +31,7 @@ public interface FinanceDAO {
 	public Object getMenuSalesByTimeY(@Param("eno")int eno, @Param("time")int time,@Param("start")String start,@Param("end")String end, @Param("menu")String menu);
 	@Select("select sum(count*price) from enterprise_report_view where eno=${eno} and mname=#{menu} and (date_format(otime, '%H') = ${time}) and otime >= #{start} and otime <= #{end} group by mname")
 	public Object getMenuSalesByTimeC(@Param("eno")int eno, @Param("time")int time,@Param("start")String start,@Param("end")String end, @Param("menu")String menu);
+	
+	@Select("select eno, ename, otime, ptime, count, mname, price, mcategory, total from enterprise_report_view where eno=${eno} and (Year(otime) between ${start} and ${end}) order by otime asc")
+	public List<ReportViewVO> getSalesReport(@Param("eno")int eno, @Param("start")String start, @Param("end")String end);
 }
