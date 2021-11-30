@@ -12,7 +12,14 @@ public class ReportViewVO {
 	private int price;
 	private String mcategory;
 	private int total;
+	private int odcode;
 	
+	public int getOdcode() {
+		return odcode;
+	}
+	public void setOdcode(int odcode) {
+		this.odcode = odcode;
+	}
 	public int getEno() {
 		return eno;
 	}
